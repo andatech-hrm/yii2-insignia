@@ -18,10 +18,14 @@ use yii\widgets\ActiveForm;
 
     <?= $this->render('_form-marker',['form'=>$form,'model'=>$model]); ?>
     
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'title_full')->textInput(['maxlength' => true]) ?>
-    
+    <div class="row">
+        <div class="col-sm-4">
+            <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-sm-8">
+            <?= $form->field($model, 'title_full')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
 
     <?php /*= $form->field($model, 'status')->textInput() ?>
 
