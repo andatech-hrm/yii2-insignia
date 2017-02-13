@@ -17,7 +17,7 @@ class Module extends \yii\base\Module
      */
     public function init()
     {
-         $this->layout = 'main';
+        $this->layout = 'main';
         parent::init();
 
         // custom initialization code goes here

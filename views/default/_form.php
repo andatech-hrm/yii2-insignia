@@ -24,7 +24,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'status')->textInput() ?>
 
-    <?= $form->field($model, 'certificate_offer_name')->textInput() ?>
+    <?= $form->field($model, 'certificate_offer_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'certificate_offer_date')->textInput() ?>
 

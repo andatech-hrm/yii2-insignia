@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use anda\core\widgets\cropimageupload\CropImageUploadBehavior;
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "insignia_type".
  *
@@ -112,5 +113,16 @@ class InsigniaType extends \yii\db\ActiveRecord
     public function getInsigniaRequests()
     {
         return $this->hasMany(InsigniaRequest::className(), ['insignia_type_id' => 'id']);
+    }
+    
+    public static function getList(){
+        return ArrayHelper::map(self::find()->all(),'id','title');
+    }
+    
+    public static function getSex(){
+        return [
+            1=>'ชาย',
+            2=>'หญิง'
+        ];
     }
 }

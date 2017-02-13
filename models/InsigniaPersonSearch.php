@@ -5,12 +5,12 @@ namespace andahrm\insignia\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use andahrm\insignia\models\InsigniaRequest;
+use andahrm\insignia\models\InsigniaPerson;
 
 /**
- * InsigniaRequestSearch represents the model behind the search form of `andahrm\insignia\models\InsigniaRequest`.
+ * InsigniaPersonSearch represents the model behind the search form of `andahrm\insignia\models\InsigniaPerson`.
  */
-class InsigniaRequestSearch extends InsigniaRequest
+class InsigniaPersonSearch extends InsigniaPerson
 {
     /**
      * @inheritdoc
@@ -18,8 +18,9 @@ class InsigniaRequestSearch extends InsigniaRequest
     public function rules()
     {
         return [
-            [['id', 'person_type_id', 'insignia_type_id', 'sex', 'status', 'edoc_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['year', 'certificate_offer_name', 'certificate_offer_date'], 'safe'],
+            [['insignia_request_id', 'user_id', 'position_level_id', 'position_id', 'insignia_request_id_last', 'insignia_type_id'], 'integer'],
+            [['position_current_date', 'feat', 'note'], 'safe'],
+            [['salary'], 'number'],
         ];
     }
 
@@ -41,7 +42,7 @@ class InsigniaRequestSearch extends InsigniaRequest
      */
     public function search($params)
     {
-        $query = InsigniaRequest::find();
+        $query = InsigniaPerson::find();
 
         // add conditions that should always apply here
 
@@ -59,21 +60,18 @@ class InsigniaRequestSearch extends InsigniaRequest
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'person_type_id' => $this->person_type_id,
-            'year' => $this->year,
+            'insignia_request_id' => $this->insignia_request_id,
+            'user_id' => $this->user_id,
+            'position_level_id' => $this->position_level_id,
+            'position_current_date' => $this->position_current_date,
+            'salary' => $this->salary,
+            'position_id' => $this->position_id,
+            'insignia_request_id_last' => $this->insignia_request_id_last,
             'insignia_type_id' => $this->insignia_type_id,
-            'sex' => $this->sex,
-            'status' => $this->status,
-            'certificate_offer_date' => $this->certificate_offer_date,
-            'edoc_id' => $this->edoc_id,
-            'created_at' => $this->created_at,
-            'created_by' => $this->created_by,
-            'updated_at' => $this->updated_at,
-            'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'certificate_offer_name', $this->certificate_offer_name]);
+        $query->andFilterWhere(['like', 'feat', $this->feat])
+            ->andFilterWhere(['like', 'note', $this->note]);
 
         return $dataProvider;
     }
