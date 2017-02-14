@@ -51,7 +51,9 @@ class Person extends Model
     
     
     public static function getPerson($event){
-        $data = $event->sender->read('request')[0];
+        $data = $event->sender->read('topic')[0];
+        // print_r($data);
+        // exit();
         $person_type_id = $data->person_type_id;
         $position_id = $data->position_id;
         $position_level_id = $data->position_level_id;

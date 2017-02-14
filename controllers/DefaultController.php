@@ -5,6 +5,7 @@ namespace andahrm\insignia\controllers;
 use Yii;
 use andahrm\insignia\models\InsigniaRequest;
 use andahrm\insignia\models\InsigniaRequestSearch;
+use andahrm\insignia\models\InsigniaPerson;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -45,9 +46,9 @@ class DefaultController extends Controller
             case 'request':
                 $config = [
                     'steps' => [
-                        Yii::t('andahrm/insignia','Topic') => 'request',
+                        Yii::t('andahrm/insignia','Topic') => 'topic',
                         Yii::t('andahrm/insignia','Select Person') => 'person',
-                        Yii::t('andahrm/insignia','Assign Insignia') => 'detail',
+                        Yii::t('andahrm/insignia','Assign Insignia') => 'assign',
                         Yii::t('andahrm/insignia','Confirm') => 'confirm',
                     ],
                     'events' => [
@@ -179,18 +180,13 @@ class DefaultController extends Controller
     public function requestWizardStep($event)
     {
         if (empty($event->stepData)) {
-            
             $modelName = 'andahrm\insignia\models\\'.ucfirst($event->step);
             $model = new $modelName(['scenario'=>'insert']);
         } else {
             $model = $event->stepData;
-            
         }
-        
 
         $post = Yii::$app->request->post();
-        
-        
         // if(isset($post['_pjax'])){
         //     $modelName = 'andahrm\insignia\models\\'.ucfirst($event->step);
         //     $model = new $modelName(['scenario'=>'insert']);
@@ -205,8 +201,6 @@ class DefaultController extends Controller
         } elseif ($model->load($post) && $model->validate()) {
             $event->data    = $model;
             $event->handled = true;
-            
-            
 
             if (isset($post['pause'])) {
                 $event->continue = false;
@@ -214,11 +208,9 @@ class DefaultController extends Controller
                 $event->nextStep = WizardBehavior::DIRECTION_REPEAT;
             }
             
-            
-            
         } else {
             //print_r($this->read('request'));
-            //print_r($model->getErrors());
+            print_r($model->getErrors());
             //$behavior = $this;
             $event->data = $this->render('request/'.$event->step, compact('event', 'model'));
         }
@@ -271,20 +263,67 @@ class DefaultController extends Controller
             
             
             
-            $model = $event->stepData['request'][0];
-            if($model->save()){
-                $event->stepData['request'][0] = $model;
-                $modelDetail = $event->stepData['detail'][0];
-                $modelDetail->insignia_request_id = $model->id;
-                $modelDetail->save();
-                $event->stepData['detail'][0] = $modelDetail;
+            // $model = $event->stepData['topic'][0];
+            // if($model->save()){
+            //     $event->stepData['topic'][0] = $model;
+            //     $modelAssign = $event->stepData['assign'][0];
+                
+            //     foreach($modelAssign as $assign){
+                    
+            //     }
+            //     $modelAssign->insignia_request_id = $model->id;
+            //     $modelAssign->save();
+            //     $event->stepData['topic'][0] = $modelDetail;
+            // }
+            
+             print_r($event->stepData['topic'][0]);
+             exit();
+            $transaction = \Yii::$app->db->beginTransaction();
+            try {
+                $model = $event->stepData['topic'][0];
+                $modelConfirm = $event->stepData['confirm'][0];
+                $model->status = $modelConfirm->status;
+                print_r($model);
+               
+                if ($flag = $model->save(false)) {
+                    //$event->stepData['topic'][0] = $model;
+                    $modelAssign = $event->stepData['assign'][0];
+                    foreach ($modelAssign->insignia_type_id as $key => $assign) {
+                        $modelPerson = new InsigniaPerson();
+                        $modelPerson->insignia_request_id = $model->id;            
+                        $modelPerson->user_id = $key;     
+                        $modelPerson->position_level_id = 1;
+                        $modelPerson->position_current_date = date('Y-m-d');
+                        $modelPerson->salary = 10001;            
+                        $modelPerson->position_id = 1;            
+                        $modelPerson->insignia_type_id = $assign;            
+                        $modelPerson->note = $modelAssign->note[$key];            
+                        if (($flag = $modelPerson->save(false)) === false) {
+                            $transaction->rollBack();
+                            break;
+                        }else{
+                            print_r($modelPerson->getErrors());
+                        }
+                    }
+                }
+                if ($flag) {
+                    $transaction->commit();
+                    if ($model->save()) {
+                        $this->redirect(['view', 'id' => $model->id]);
+                    } else {
+                        print_r($model->getErrors());
+                    }
+                }
+            } catch (Exception $e) {
+                $transaction->rollBack();
             }
+
+            exit();
             
             
-            
-            $event->data = $this->render('request/complete', [
-                'data' => $event->stepData
-            ]);
+            // $event->data = $this->render('request/complete', [
+            //     'data' => $event->stepData
+            // ]);
         } else {
             $event->data = $this->render('request/notStarted');
         }

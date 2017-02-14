@@ -34,6 +34,8 @@ class Confirm extends InsigniaRequest
         ];
     }
     
+    
+    
      public function scenarios(){
           $scenarios = parent::scenarios();
           $scenarios['insert'] = ['status'];

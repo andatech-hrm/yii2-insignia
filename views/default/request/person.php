@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 use backend\widgets\WizardMenu;
-use andahrm\insignia\models\Detail;
+use andahrm\insignia\models\Person;
 
 
 
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/insignia', 'Insigni
         <?php
         $selection = $model; #Global
         echo yii\grid\GridView::widget([
-            'dataProvider' => Detail::getPerson($event),
+            'dataProvider' => Person::getPerson($event),
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 [

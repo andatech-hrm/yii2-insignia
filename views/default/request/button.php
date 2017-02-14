@@ -38,7 +38,7 @@ echo Html::beginTag('div', ['class' => 'btn-toolbar','role'=>'toolbar']);
         if($finish>$step_index){
             echo Html::submitButton('Next <i class="fa fa-arrow-right "></i>', ['class' => 'btn btn-success', 'name' => 'next', 'value' => 'next']);
         }else{
-            echo Html::submitButton('<i class="fa fa-flag-checkered"></i> Done', ['class' => 'btn btn-success', 'name' => 'next', 'value' => 'next','onclick'=>'if(confirm("Are you"))']);
+            echo Html::submitButton('<i class="fa fa-flag-checkered"></i> Done', ['class' => 'btn btn-success', 'name' => 'next', 'value' => 'next']);
         }
     echo Html::endTag('div');
     

@@ -9,6 +9,7 @@ use andahrm\insignia\models\InsigniaRequest;
 use andahrm\structure\models\PersonType;
 use andahrm\structure\models\FiscalYear;
 
+use andahrm\insignia\models\Assign;
 
 use kartik\widgets\Typeahead;
 /* @var $this yii\web\View */
@@ -29,7 +30,11 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/insignia', 'Insigni
 $this->params['breadcrumbs'][] = $this->title;
 
 
-$stepTopic = $event->sender->read('request')[0];
+$stepTopic = $event->sender->read('topic')[0];
+$stepPerson = $event->sender->read('person')[0];
+$stepAssign = $event->sender->read('assign')[0];
+
+//print_r($stepAssign);
 ?>
 
 <?php echo WizardMenu::widget([
@@ -41,7 +46,7 @@ $stepTopic = $event->sender->read('request')[0];
     
 
 <?php $form = ActiveForm::begin(); ?>
-
+<?=$form->field($model,'status')->textInput()?>
 <div class="x_panel tile">
     <div class="x_title">
         <h2><?= $this->title; ?></h2>
@@ -51,16 +56,20 @@ $stepTopic = $event->sender->read('request')[0];
     
         
         
-             <?=$this->render('../_template1',[
+             <?=$this->render('../_template_gov',[
              //'event'=>$event,
              //'model'=>$model
              'person_type' => $stepTopic->personType->title,
-             'year' => $stepTopic->yearTh
+             'year' => $stepTopic->yearTh,
+             'person' => Assign::getPerson($stepPerson)->getModels(),
+             'assign' => $stepAssign
              ]);?>
          
-
+        
             <hr />
             <?=$this->render('button',['event'=>$event]);?>
+            
+            
 
         <div class="clearfix"></div>
     </div>
