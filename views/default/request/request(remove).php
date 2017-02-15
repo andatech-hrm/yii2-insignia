@@ -130,7 +130,7 @@ $this->registerCss($css);
                 </div>
                 
                 <div class="col-sm-4">
-                <?= $form->field($model, 'sex')->dropDownList(InsigniaType::getSex(),['prompt'=>Yii::t('app','Select')]) ?>
+                <?= $form->field($model, 'gender')->dropDownList(InsigniaType::getgender(),['prompt'=>Yii::t('app','Select')]) ?>
                 </div>
             </div>      
                 

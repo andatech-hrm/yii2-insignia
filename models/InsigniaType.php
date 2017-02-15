@@ -3,6 +3,7 @@
 namespace andahrm\insignia\models;
 
 use Yii;
+use yii\helpers\Html;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use anda\core\widgets\cropimageupload\CropImageUploadBehavior;
@@ -119,10 +120,15 @@ class InsigniaType extends \yii\db\ActiveRecord
         return ArrayHelper::map(self::find()->all(),'id','title');
     }
     
-    public static function getSex(){
-        return [
-            1=>'ชาย',
-            2=>'หญิง'
-        ];
+    public function getTitleIcon($width='30')
+    {
+        $marker = Html::img($this->getUploadUrl('marker'), [
+                        //'class' => 'img-responsive img-cropped-preview', 
+                        //'id' => 'preview',
+                        'width'=>$width
+                        ]);
+        return $marker.' '.$this->title;
     }
+    
+   
 }

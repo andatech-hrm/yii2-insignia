@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
 use backend\widgets\WizardMenu;
+use andahrm\insignia\models\PersonInsignia;
 use andahrm\insignia\models\InsigniaType;
 use andahrm\insignia\models\InsigniaRequest;
 use andahrm\structure\models\Position;
@@ -130,7 +131,7 @@ $this->registerCss($css);
                 </div>
                 
                 <div class="col-sm-4">
-                <?= $form->field($model, 'sex')->dropDownList(InsigniaType::getSex(),['prompt'=>Yii::t('app','Select')]) ?>
+                <?= $form->field($model, 'gender')->dropDownList(PersonInsignia::getGenders(),['prompt'=>Yii::t('app','Select')]) ?>
                 </div>
             </div>      
                 

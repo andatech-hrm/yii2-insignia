@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'insignia_type_id') ?>
 
-    <?= $form->field($model, 'sex') ?>
+    <?= $form->field($model, 'gender') ?>
 
     <?php // echo $form->field($model, 'status') ?>
 

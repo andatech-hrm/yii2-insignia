@@ -172,7 +172,7 @@ class DefaultController extends Controller
     {
         //$this->layout = 'form-wizard';
         
-        if ($step===null) $this->resetWizard();
+        //if ($step===null) $this->resetWizard();
         if ($step=='reset') $this->resetWizard();
         return $this->step($step);
     }
@@ -276,18 +276,19 @@ class DefaultController extends Controller
             //     $event->stepData['topic'][0] = $modelDetail;
             // }
             
-             print_r($event->stepData['topic'][0]);
-             exit();
+            //  print_r($event->stepData['topic'][0]);
+            //  exit();
             $transaction = \Yii::$app->db->beginTransaction();
             try {
                 $model = $event->stepData['topic'][0];
                 $modelConfirm = $event->stepData['confirm'][0];
                 $model->status = $modelConfirm->status;
-                print_r($model);
+                //print_r($model);
                
                 if ($flag = $model->save(false)) {
                     //$event->stepData['topic'][0] = $model;
                     $modelAssign = $event->stepData['assign'][0];
+                    InsigniaPerson::deleteAll(['insignia_request_id'=>$model->id]);
                     foreach ($modelAssign->insignia_type_id as $key => $assign) {
                         $modelPerson = new InsigniaPerson();
                         $modelPerson->insignia_request_id = $model->id;            
@@ -318,12 +319,13 @@ class DefaultController extends Controller
                 $transaction->rollBack();
             }
 
-            exit();
+           // exit();
             
             
-            // $event->data = $this->render('request/complete', [
-            //     'data' => $event->stepData
-            // ]);
+            $event->data = $this->render('request/complete', [
+                'data' => $event->stepData
+            ]);
+            
         } else {
             $event->data = $this->render('request/notStarted');
         }

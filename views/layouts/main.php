@@ -29,7 +29,7 @@ $controller = Yii::$app->controller->id;
                     $menuItems = [];
       
                     $menuItems[] =  [
-                            'label' =>  Yii::t('andahrm/insignia', 'Insignia'),
+                            'label' =>  Yii::t('andahrm/insignia', 'Insignia Requests'),
                             'url' => ["/{$module}/default/"],
                             'icon' => 'fa fa-index'
                      ];

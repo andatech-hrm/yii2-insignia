@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'insignia_type_id')->textInput() ?>
 
-    <?= $form->field($model, 'sex')->textInput() ?>
+    <?= $form->field($model, 'gender')->textInput() ?>
 
     <?= $form->field($model, 'status')->textInput() ?>
 

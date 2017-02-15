@@ -11,7 +11,7 @@ use Yii;
  * @property integer $person_type_id
  * @property string $year
  * @property integer $insignia_type_id
- * @property integer $sex
+ * @property integer $gender
  * @property integer $status
  * @property integer $certificate_offer_name
  * @property string $certificate_offer_date
@@ -31,7 +31,7 @@ class Request extends InsigniaRequest
     {
         
         return [
-            [['person_type_id', 'year', 'certificate_offer_name', 'sex'], 'required'],
+            [['person_type_id', 'year', 'certificate_offer_name', 'gender'], 'required'],
             [['user_selected'], 'safe'],
         ];
     }
@@ -45,7 +45,7 @@ class Request extends InsigniaRequest
     public function scenarios(){
       $scenarios = parent::scenarios();
       
-      $scenarios['insert'] = ['person_type_id', 'year', 'certificate_offer_name', 'sex','user_selected','position_line_id',
+      $scenarios['insert'] = ['person_type_id', 'year', 'certificate_offer_name', 'gender','user_selected','position_line_id',
       'position_id',
       'position_level_id',
       ];

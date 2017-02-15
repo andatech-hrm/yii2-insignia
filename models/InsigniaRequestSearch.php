@@ -18,7 +18,7 @@ class InsigniaRequestSearch extends InsigniaRequest
     public function rules()
     {
         return [
-            [['id', 'person_type_id', 'insignia_type_id', 'sex', 'status', 'edoc_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'person_type_id', 'insignia_type_id', 'gender', 'status', 'edoc_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['year', 'certificate_offer_name', 'certificate_offer_date'], 'safe'],
         ];
     }
@@ -63,7 +63,7 @@ class InsigniaRequestSearch extends InsigniaRequest
             'person_type_id' => $this->person_type_id,
             'year' => $this->year,
             'insignia_type_id' => $this->insignia_type_id,
-            'sex' => $this->sex,
+            'gender' => $this->gender,
             'status' => $this->status,
             'certificate_offer_date' => $this->certificate_offer_date,
             'edoc_id' => $this->edoc_id,

@@ -3,7 +3,6 @@
 namespace andahrm\insignia\models;
 
 use Yii;
-
 /**
  * This is the model class for table "insignia_person".
  *
@@ -91,4 +90,23 @@ class InsigniaPerson extends \yii\db\ActiveRecord
     {
         return $this->hasOne(InsigniaRequest::className(), ['id' => 'insignia_request_id_last']);
     }
+    
+    public function getUser()
+    {
+        return $this->hasOne(PersonInsignia::className(), ['user_id' => 'user_id']);
+    }
+    
+    
+    
+        public function getLevel(){
+           return "Level";
+       } 
+   
+       public function getAdjust_date(){
+           return "Level";
+       }
+       
+       public function getPosition(){
+           return $this->user->position;
+       }
 }

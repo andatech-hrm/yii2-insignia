@@ -25,14 +25,25 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
+
+            <?=$this->render('_template_gov',[
+                 //'event'=>$event,
+                 //'model'=>$model
+                 'person_type' => $model->personType->title,
+                 'year' => $model->yearTh,
+                 'person' => $model->insigniaPeople,
+                 'assign' => $stepAssign
+             ]);?>
+
+
+    <?php /*= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'person_type_id',
             'year',
             'insignia_type_id',
-            'sex',
+            'gender',
             'status',
             'certificate_offer_name',
             'certificate_offer_date',
@@ -42,6 +53,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
             'updated_by',
         ],
-    ]) ?>
+    ]) */?>
 
 </div>

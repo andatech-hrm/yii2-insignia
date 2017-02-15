@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
-use yii\web\JsExpression;
+use yii\web\Jgenderpression;
 use anda\core\widgets\cropimageupload\CropImageUpload;
 ?>
 <div class="form-group-image-crop">

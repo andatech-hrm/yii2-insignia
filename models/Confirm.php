@@ -11,7 +11,7 @@ use Yii;
  * @property integer $person_type_id
  * @property string $year
  * @property integer $insignia_type_id
- * @property integer $sex
+ * @property integer $gender
  * @property integer $status
  * @property integer $certificate_offer_name
  * @property string $certificate_offer_date
