@@ -17,6 +17,7 @@ use andahrm\structure\models\Position;
 use andahrm\structure\models\PositionLevel;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
+use andahrm\setting\models\Helper;
 /**
  * DefaultController implements the CRUD actions for InsigniaRequest model.
  */
@@ -58,6 +59,9 @@ class DefaultController extends Controller
                     ]
                 ];
                 break;
+            case 'resume':
+                $config = ['steps' => []]; // force attachment of WizardBehavior
+                
            
             default:
                 break;
@@ -65,6 +69,7 @@ class DefaultController extends Controller
 
         if (!empty($config)) {
             $config['class'] = WizardBehavior::className();
+            $config['sessionKey'] = 'Wizard-Insignia';
             $this->attachBehavior('wizard', $config);
         }
 
@@ -79,6 +84,9 @@ class DefaultController extends Controller
     {
         $searchModel = new InsigniaRequestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort->defaultOrder = [
+            'year'=>SORT_DESC
+            ];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -95,6 +103,27 @@ class DefaultController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+        ]);
+    }
+    
+    public function actionCertification($id)
+    {
+        
+        $model = $this->findModel($id);
+        $model->scenario = 'certification';
+
+        if ($model->load(Yii::$app->request->post())){
+            print_r(Yii::$app->request->post());
+            if($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                print_r($model->getErrors());
+            }
+            exit();
+        } 
+        
+        return $this->render('certification', [
+            'model' => $model,
         ]);
     }
 
@@ -158,6 +187,7 @@ class DefaultController extends Controller
     protected function findModel($id)
     {
         if (($model = InsigniaRequest::findOne($id)) !== null) {
+            $model->year = intval($model->year) + Helper::YEAR_TH_ADD;
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -210,7 +240,7 @@ class DefaultController extends Controller
             
         } else {
             //print_r($this->read('request'));
-            print_r($model->getErrors());
+            //print_r($model->getErrors());
             //$behavior = $this;
             $event->data = $this->render('request/'.$event->step, compact('event', 'model'));
         }
@@ -221,8 +251,10 @@ class DefaultController extends Controller
     */
     public function invalidStep($event)
     {
+        
         $event->data = $this->render('invalidStep', compact('event'));
         $event->continue = false;
+        return $this->redirect(['request']);
     }
 
     /**
@@ -242,7 +274,7 @@ class DefaultController extends Controller
                 mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
             );
 
-            $registrationDir = Yii::getAlias('@runtime/request');
+            $registrationDir = Yii::getAlias('@runtime/wizard/insignia');
             $registrationDirReady = true;
             if (!file_exists($registrationDir)) {
                 if (!mkdir($registrationDir) || !chmod($registrationDir, 0775)) {
@@ -278,25 +310,31 @@ class DefaultController extends Controller
             
             //  print_r($event->stepData['topic'][0]);
             //  exit();
+            $model = $event->stepData['topic'][0];
+            if($model){
             $transaction = \Yii::$app->db->beginTransaction();
             try {
-                $model = $event->stepData['topic'][0];
+                
                 $modelConfirm = $event->stepData['confirm'][0];
-                $model->status = $modelConfirm->status;
+                $model->status = InsigniaRequest::STATUS_OFFER;
                 //print_r($model);
                
                 if ($flag = $model->save(false)) {
                     //$event->stepData['topic'][0] = $model;
                     $modelAssign = $event->stepData['assign'][0];
                     InsigniaPerson::deleteAll(['insignia_request_id'=>$model->id]);
+                    print_r($modelAssign->insignia_type_id);
                     foreach ($modelAssign->insignia_type_id as $key => $assign) {
                         $modelPerson = new InsigniaPerson();
                         $modelPerson->insignia_request_id = $model->id;            
                         $modelPerson->user_id = $key;     
-                        $modelPerson->position_level_id = 1;
-                        $modelPerson->position_current_date = date('Y-m-d');
-                        $modelPerson->salary = 10001;            
-                        $modelPerson->position_id = 1;            
+                        
+                        $modelPerson->last_step = $modelAssign->current_step[$key];
+                        $modelPerson->last_adjust_date = $modelAssign->current_adjust_date[$key];
+                        $modelPerson->last_salary = $modelAssign->current_salary[$key];            
+                        $modelPerson->last_position_id = $modelAssign->current_position_id[$key];            
+                        $modelPerson->last_insignia_request_id= $modelAssign->current_insignia_request_id[$key];    
+                        
                         $modelPerson->insignia_type_id = $assign;            
                         $modelPerson->note = $modelAssign->note[$key];            
                         if (($flag = $modelPerson->save(false)) === false) {
@@ -318,18 +356,37 @@ class DefaultController extends Controller
             } catch (Exception $e) {
                 $transaction->rollBack();
             }
-
+            }
            // exit();
             
             
             $event->data = $this->render('request/complete', [
                 'data' => $event->stepData
             ]);
+            //$event->continue = false;
             
         } else {
             $event->data = $this->render('request/notStarted');
         }
     }
+    
+     /**
+    * Method description
+    *
+    * @return mixed The return value
+    */
+    public function actionResume($uuid)
+    {
+        $registrationFile = Yii::getAlias('@runtime/wizard/insignia').DIRECTORY_SEPARATOR.$uuid;
+        if (file_exists($registrationFile)) {
+            $this->resumeWizard(@file_get_contents($registrationFile));
+            unlink($registrationFile);
+            $this->redirect(['request']);
+        } else {
+            return $this->render('request/notResumed');
+        }
+    }
+    ######### End Wizard
     
      protected function MapData($datas,$fieldId,$fieldName){
      $obj = [];
@@ -440,5 +497,9 @@ class DefaultController extends Controller
          ->all();
          return $this->MapData($datas,'id','title');
      }
+     
+     
+     
+    
 
 }

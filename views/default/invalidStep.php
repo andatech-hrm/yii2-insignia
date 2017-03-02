@@ -7,4 +7,4 @@ echo Html::tag('h1', $this->title);
 echo Html::tag('div', strtr('An invalid step ({step}) was detected.', [
     '{step}' => $event->step
 ]));
-echo Html::a('Choose Another Demo', '/wizard');
+//echo Html::a('Choose Another Demo', '/wizard');

@@ -18,9 +18,9 @@ class InsigniaPersonSearch extends InsigniaPerson
     public function rules()
     {
         return [
-            [['insignia_request_id', 'user_id', 'position_level_id', 'position_id', 'insignia_request_id_last', 'insignia_type_id'], 'integer'],
-            [['position_current_date', 'feat', 'note'], 'safe'],
-            [['salary'], 'number'],
+            [['insignia_request_id', 'user_id', 'last_position_id', 'last_edoc_id', 'last_insignia_request_id', 'insignia_type_id'], 'integer'],
+            [['last_step', 'last_salary'], 'number'],
+            [['last_adjust_date', 'feat', 'note'], 'safe'],
         ];
     }
 
@@ -62,11 +62,12 @@ class InsigniaPersonSearch extends InsigniaPerson
         $query->andFilterWhere([
             'insignia_request_id' => $this->insignia_request_id,
             'user_id' => $this->user_id,
-            'position_level_id' => $this->position_level_id,
-            'position_current_date' => $this->position_current_date,
-            'salary' => $this->salary,
-            'position_id' => $this->position_id,
-            'insignia_request_id_last' => $this->insignia_request_id_last,
+            'last_step' => $this->last_step,
+            'last_adjust_date' => $this->last_adjust_date,
+            'last_salary' => $this->last_salary,
+            'last_position_id' => $this->last_position_id,
+            'last_edoc_id' => $this->last_edoc_id,
+            'last_insignia_request_id' => $this->last_insignia_request_id,
             'insignia_type_id' => $this->insignia_type_id,
         ]);
 

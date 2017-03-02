@@ -22,15 +22,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'user_id') ?>
 
-    <?= $form->field($model, 'position_level_id') ?>
+    <?= $form->field($model, 'last_step') ?>
 
-    <?= $form->field($model, 'position_current_date') ?>
+    <?= $form->field($model, 'last_adjust_date') ?>
 
-    <?= $form->field($model, 'salary') ?>
+    <?= $form->field($model, 'last_salary') ?>
 
-    <?php // echo $form->field($model, 'position_id') ?>
+    <?php // echo $form->field($model, 'last_position_id') ?>
 
-    <?php // echo $form->field($model, 'insignia_request_id_last') ?>
+    <?php // echo $form->field($model, 'last_edoc_id') ?>
+
+    <?php // echo $form->field($model, 'last_insignia_request_id') ?>
 
     <?php // echo $form->field($model, 'insignia_type_id') ?>
 

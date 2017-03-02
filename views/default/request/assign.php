@@ -58,6 +58,57 @@ $data = $model;
                     //'format'=>'html',
                     'value'=>'user.fullname',
                 ],
+                 [
+                    'attribute'=>'step',
+                    'content'=> function($model){
+                        return $model->step
+                        .Html::hiddenInput("Assign[current_step][{$model->user_id}]",
+                            $model->step
+                            );
+                    },
+                ],
+                 [
+                    'attribute'=>'adjust_date',
+                    'content'=> function($model){
+                        return Yii::$app->formatter->asDate($model->adjust_date)
+                        .Html::hiddenInput("Assign[current_adjust_date][{$model->user_id}]",
+                            $model->adjust_date
+                            );
+                    },
+                    ],
+                    
+                  [
+                    'attribute'=>'salary',
+                    'format' => 'decimal',
+                    'contentOptions'=>['class'=>'text-right'],
+                    'content'=> function($model){
+                        return Yii::$app->formatter->asDecimal($model->salary)
+                        .Html::hiddenInput("Assign[current_salary][{$model->user_id}]",
+                            $model->salary
+                            );
+                    },
+                ],
+                [
+                    'attribute'=>'position_id',
+                    'format'=>'html',
+                    'content'=> function($model){
+                        return $model->position->title."<br/><small>".$model->position->code."</small>"
+                        .Html::hiddenInput("Assign[current_position_id][{$model->user_id}]",
+                            $model->position_id
+                            );
+                    },
+                ],
+                [
+                    'attribute'=>'insignia_request_id',
+                    'format' => 'html',
+                    'value'=>'insigniaType.title',
+                    'content'=> function($model){
+                        return $model->insignia_type_id?$model->insigniaType->title
+                        .Html::hiddenInput("Assign[current_insignia_request_id][{$model->user_id}]",
+                            $model->insignia_request_id
+                            ):'-';
+                    },
+                ],
                 
                 [
                     'attribute'=>'insignia_type_id',

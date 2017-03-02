@@ -17,12 +17,13 @@ $this->title = Yii::t('andahrm/insignia', 'Insignia Requests');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="insignia-request-index">
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a(Yii::t('andahrm/insignia', 'Create Insignia Request'), ['request'], ['class' => 'btn btn-success']) ?>
     </p>
+    <?php Pjax::begin(); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -34,7 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=> 'person_type_id',
                 'filter'=>PersonType::getForInsignia(),
+                'headerOptions'=>['width'=>'150'],
                 'value' => 'personType.title'
+                
                 ],
             [
                 'attribute'=> 'year',
@@ -60,18 +63,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                 'attribute'=> 'status',
                 'filter'=>InsigniaRequest::getItemStatus(),
-                'value' => 'statusLabel'
+                'value' => 'statusLabel',
+                
                 ],
-           
             // 'certificate_offer_name',
             // 'certificate_offer_date',
             // 'edoc_id',
-             'created_at:datetime',
-             'created_by',
+             //'created_at:datetime',
+             //'created_by',
             // 'updated_at',
             // 'updated_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=> '<div class="btn-group btn-group-sm text-center" role="group"> {certification} {view} </div>',
+                'buttonOptions'=>['class'=>'btn btn-default'],
+                'buttons' => [
+                    'certification'=>function($url,$model,$key){
+                        return $model->status == InsigniaRequest::STATUS_OFFER?
+                        Html::a($model->statusLabel,$url,['class'=>'btn btn-success']):
+                        Html::a($model->statusLabel,$url,['class'=>'btn btn-default','disabled'=>'disabled'])
+                            ;
+                     } 
+                
+                ]
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

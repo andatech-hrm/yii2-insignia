@@ -59,9 +59,9 @@ class Topic extends InsigniaRequest
     {
         
         $label = parent::attributeLabels();
-        $label['position_line_id'] = Yii::t('andahrm/insignia', 'ตำแหน่งในสายงาน');
-        $label['position_id'] = Yii::t('andahrm/insignia', 'ตำแหน่ง');
-        $label['position_level_id'] = Yii::t('andahrm/insignia', 'ระดับ');
+        $label['position_line_id'] = Yii::t('andahrm/insignia', 'Position Line');
+        $label['position_id'] = Yii::t('andahrm/insignia', 'Position');
+        $label['position_level_id'] = Yii::t('andahrm/insignia', 'Position Level');
         return $label;
     }
     

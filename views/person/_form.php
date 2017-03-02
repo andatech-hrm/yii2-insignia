@@ -16,15 +16,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'user_id')->textInput() ?>
 
-    <?= $form->field($model, 'position_level_id')->textInput() ?>
+    <?= $form->field($model, 'last_step')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'position_current_date')->textInput() ?>
+    <?= $form->field($model, 'last_adjust_date')->textInput() ?>
 
-    <?= $form->field($model, 'salary')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'last_salary')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'position_id')->textInput() ?>
+    <?= $form->field($model, 'last_position_id')->textInput() ?>
 
-    <?= $form->field($model, 'insignia_request_id_last')->textInput() ?>
+    <?= $form->field($model, 'last_insignia_request_id')->textInput() ?>
 
     <?= $form->field($model, 'insignia_type_id')->textInput() ?>
 

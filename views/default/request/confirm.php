@@ -34,6 +34,8 @@ $stepTopic = $event->sender->read('topic')[0];
 $stepPerson = $event->sender->read('person')[0];
 $stepAssign = $event->sender->read('assign')[0];
 
+
+
 //print_r($stepAssign);
 ?>
 
@@ -46,7 +48,7 @@ $stepAssign = $event->sender->read('assign')[0];
     
 
 <?php $form = ActiveForm::begin(); ?>
-<?=$form->field($model,'status')->textInput()?>
+<?=$form->field($model,'status')->hiddenInput()->label(false)?>
 <div class="x_panel tile">
     <div class="x_title">
         <h2><?= $this->title; ?></h2>
@@ -56,13 +58,14 @@ $stepAssign = $event->sender->read('assign')[0];
     
         
         
-             <?=$this->render('../_template_gov',[
+             <?=$this->render('_template_gov',[
              //'event'=>$event,
              //'model'=>$model
              'person_type' => $stepTopic->personType->title,
              'year' => $stepTopic->yearTh,
              'person' => Assign::getPerson($stepPerson)->getModels(),
-             'assign' => $stepAssign
+             'assign' => $stepAssign,
+             'topic'=>$stepTopic,
              ]);?>
          
         

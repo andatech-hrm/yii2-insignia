@@ -56,6 +56,11 @@ class InsigniaRequestSearch extends InsigniaRequest
             // $query->where('0=1');
             return $dataProvider;
         }
+        
+        if($this->year){
+            $yearDistance = $this->getBehavior('year')->yearDistance;
+            $this->year = (intval($this->year) - $yearDistance);
+        }
 
         // grid filtering conditions
         $query->andFilterWhere([

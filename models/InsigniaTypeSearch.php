@@ -67,7 +67,7 @@ class InsigniaTypeSearch extends InsigniaType
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'title_full', $this->title])
+        $query->andFilterWhere(['like', 'title_full', $this->title_full])
             ->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'marker', $this->marker])
             ->andFilterWhere(['like', 'marker_scope', $this->marker_scope])

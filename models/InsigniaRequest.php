@@ -3,10 +3,15 @@
 namespace andahrm\insignia\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use kuakling\datepicker\behaviors\DateBuddhistBehavior;
+use kuakling\datepicker\behaviors\YearBuddhistBehavior;
 use yii\helpers\ArrayHelper;
 use andahrm\structure\models\PersonType;
+
+use andahrm\setting\models\Helper;
 
 /**
  * This is the model class for table "insignia_request".
@@ -29,7 +34,7 @@ use andahrm\structure\models\PersonType;
  * @property InsigniaPerson[] $insigniaPeople0
  * @property InsigniaType $insigniaType
  */
-class InsigniaRequest extends \yii\db\ActiveRecord
+class InsigniaRequest extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -49,6 +54,14 @@ class InsigniaRequest extends \yii\db\ActiveRecord
             [
                 'class' => TimestampBehavior::className(),
             ],
+            'certificate_offer_date' => [
+                'class' => DateBuddhistBehavior::className(),
+                'dateAttribute' => 'certificate_offer_date',
+            ],
+            // 'year' => [
+            //     'class' => YearBuddhistBehavior::className(),
+            //     'attribute' => 'year',
+            // ],
         ];
     }
 
@@ -73,14 +86,14 @@ class InsigniaRequest extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('andahrm/insignia', 'ID'),
-            'person_type_id' => Yii::t('andahrm/insignia', 'ประเภทบุคคล'),
-            'year' => Yii::t('andahrm/insignia', 'ประจำปี'),
-            'insignia_type_id' => Yii::t('andahrm/insignia', 'ประเภทเครื่องราชฯ'),
-            'gender' => Yii::t('andahrm/insignia', 'กลุ่มเพศ'),
-            'status' => Yii::t('andahrm/insignia', 'สถานะ'),
-            'certificate_offer_name' => Yii::t('andahrm/insignia', 'ผู้รับรองเสนอขอพระราชทาน'),
-            'certificate_offer_date' => Yii::t('andahrm/insignia', 'ร้บรองเมื่อวันที่'),
-            'edoc_id' => Yii::t('andahrm/insignia', 'เอกสารอ้างอิง'),
+            'person_type_id' => Yii::t('andahrm/insignia', 'Person Type'),
+            'year' => Yii::t('andahrm/insignia', 'Year'),
+            'insignia_type_id' => Yii::t('andahrm/insignia', 'Insignia Type'),
+            'gender' => Yii::t('andahrm/insignia', 'Gender'),
+            'status' => Yii::t('andahrm/insignia', 'Status'),
+            'certificate_offer_name' => Yii::t('andahrm/insignia', 'The certification offered clemency'),
+            'certificate_offer_date' => Yii::t('andahrm/insignia', 'Certification on'),
+            'edoc_id' => Yii::t('andahrm/insignia', 'reference'),
             'created_at' => Yii::t('andahrm', 'Created At'),
             'created_by' => Yii::t('andahrm', 'Created By'),
             'updated_at' => Yii::t('andahrm', 'Updated At'),
@@ -88,6 +101,33 @@ class InsigniaRequest extends \yii\db\ActiveRecord
         ];
     }
     
+    public function scenarios(){
+      $scenarios = parent::scenarios();
+      $scenarios['certification'] = ['status','certificate_offer_date','edoc_i'];
+      
+      return $scenarios;
+    }
+    
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if($certificate_offer_date = \DateTime::createFromFormat(Helper::UI_DATE_FORMAT, $this->certificate_offer_date)) {
+                $this->certificate_offer_date = $certificate_offer_date->format(Helper::DB_DATE_FORMAT);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function afterFind()
+    {
+        if($certificate_offer_date = \DateTime::createFromFormat(Helper::DB_DATE_FORMAT, $this->certificate_offer_date)){
+            $this->certificate_offer_date = $certificate_offer_date->format(Helper::UI_DATE_FORMAT);
+        }
+    }
+    
+   const STATUS_NONE = null;
    const STATUS_DRAFT = 0;
    const STATUS_OFFER = 1;
    const STATUS_ALLOW = 2;
@@ -97,21 +137,30 @@ class InsigniaRequest extends \yii\db\ActiveRecord
   public static function itemsAlias($key) {
         $items = [
             'status' => [
-                //self::STATUS_DRAFT => Yii::t('andahrm/leave', 'ร่าง'),
-                self::STATUS_OFFER => Yii::t('andahrm/leave', 'เสนอ'),
-                self::STATUS_ALLOW => Yii::t('andahrm/leave', 'อนุมัติ'),
-                self::STATUS_DISALLOW => Yii::t('andahrm/leave', 'ไม่อนุมัติ'),
-                self::STATUS_CANCEL => Yii::t('andahrm/leave', 'ยกเลิก'),
+                self::STATUS_NONE => Yii::t('andahrm/insignia', 'Null'),
+                self::STATUS_OFFER => Yii::t('andahrm/insignia', 'Offer'),
+                self::STATUS_ALLOW => Yii::t('andahrm/insignia', 'Allow'),
+                self::STATUS_DISALLOW => Yii::t('andahrm/insignia', 'Disallow'),
+                self::STATUS_CANCEL => Yii::t('andahrm/insignia', 'Cancel'),
             ],
+            'status_consider' => [
+                 self::STATUS_ALLOW => Yii::t('andahrm/insignia', 'Allow'),
+                self::STATUS_DISALLOW => Yii::t('andahrm/insignia', 'Disallow'),
+            ]
         ];
         return ArrayHelper::getValue($items, $key, []);
     }
   
     public function getStatusLabel() {
-        return ArrayHelper::getValue($this->getItemStatus(), $this->status);;
+        return ArrayHelper::getValue($this->getItemStatus(), $this->status);
     }
+    
      public static function getItemStatus() {
           return self::itemsAlias('status');
+     }
+     
+     public static function getItemStatusConsider() {
+          return self::itemsAlias('status_consider');
      }
 
     /**
@@ -162,6 +211,12 @@ class InsigniaRequest extends \yii\db\ActiveRecord
         return $this->year+543;
     }
     
+    public function getYearBuddhist()
+    {
+        $yearDistance = $this->getBehavior('year')->yearDistance;
+        return (intval($this->year) + $yearDistance);
+    }
+    
     
     public static function getGenders()
     {
@@ -176,4 +231,52 @@ class InsigniaRequest extends \yii\db\ActiveRecord
         }
         return null;
     }
+    
+    
+    public static function getFormTemplate($person_type_id)
+    {
+        $temp = '';
+        switch ($person_type_id) {
+            case 1:
+            case 9:
+                $temp = '_template_gov';
+                break;
+                
+            case 2:
+            case 3:
+            case 4:
+                $temp = '_template_gov';
+                break;
+                
+            case 8:
+                $temp = '_template_gov';
+                break;
+        }
+        return $temp;
+        
+    }
+    public function getViewTemplate()
+    {
+        $temp = '';
+        switch ($this->person_type_id) {
+            case 1:
+            case 9:
+                $temp = '_view_template_gov';
+                break;
+                
+            case 2:
+            case 3:
+            case 4:
+                $temp = '_view_template_gov';
+                break;
+                
+            case 8:
+                $temp = '_view_template_gov';
+                break;
+        }
+        return $temp;
+        
+    }
+    
+    
 }

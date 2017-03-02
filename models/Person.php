@@ -64,11 +64,12 @@ class Person extends Model
                 ->andFilterWhere(['position.id'=>$position_id])
                 ->andFilterWhere(['position.position_level_id'=>$position_level_id])
                 ->groupBy([
+                    //'position.id',
                     'user_id',
-                   //'position_id',
+                    
                     
                 ])
-                ->orderBy(['adjust_date'=>SORT_ASC]);
+                ->orderBy(['position_id'=>SORT_ASC,'adjust_date'=>SORT_ASC]);
                 
         $provider = new ActiveDataProvider([
             'query' => $query,

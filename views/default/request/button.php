@@ -16,29 +16,30 @@ $step_index = array_search($step,$steps);
 echo Html::beginTag('div', ['class' => 'btn-toolbar','role'=>'toolbar']);
 
     echo Html::beginTag('div', ['class' => 'btn-group pull-left','role'=>'group']);
-         echo Html::a('<i class="fa fa-times"></i> Reset',['request','step'=>'reset'], ['class' => 'btn btn-link', 'name' => 'cancel', 'value' => 'pause']);
+         echo Html::a('<i class="fa fa-times"></i> '.Yii::t('andahrm', 'Reset'),['request','step'=>'reset'], ['class' => 'btn btn-link', 'name' => 'cancel', 'value' => 'pause']);
      echo Html::endTag('div');
     
     
      echo Html::beginTag('div', ['class' => 'btn-group pull-right','role'=>'group']);
          if($step_index >0){
-            echo Html::submitButton('<i class="fa fa-pause"></i>  Pause', ['class' => 'btn btn-default', 'name' => 'pause', 'value' => 'pause']);
+            echo Html::submitButton('<i class="fa fa-pause"></i>  '.Yii::t('andahrm', 'Pause'), ['class' => 'btn btn-default', 'name' => 'pause', 'value' => 'pause']);
          }
-         echo Html::submitButton('<i class="fa fa-times"></i> Cancel', ['class' => 'btn btn-default', 'name' => 'cancel', 'value' => 'pause']);
+         echo Html::submitButton('<i class="fa fa-times"></i> '.Yii::t('andahrm', 'Cancel'), ['class' => 'btn btn-default', 'name' => 'cancel', 'value' => 'pause']);
      echo Html::endTag('div');
     
     
     echo Html::beginTag('div', ['class' => 'btn-group pull-right','role'=>'group']);
         //if($event->n >0 && $event->t ==1 ){
-            echo Html::submitButton('<i class="fa fa-arrow-left "></i> Prev', ['class' => 'btn btn-primary', 'name' => 'prev', 'value' => 'prev' ]);
+            echo Html::submitButton('<i class="fa fa-arrow-left "></i> '.Yii::t('andahrm', 'Prev'), ['class' => 'btn btn-primary', 'name' => 'prev', 'value' => 'prev' ]);
        // }else{
-       //     echo Html::submitButton('<i class="fa fa-arrow-left "></i> Prev', ['class' => 'btn btn-default', 'name' => 'prev', 'value' => 'prev','disabled'=>'disabled' ]);
+       //     echo Html::submitButton('<i class="fa fa-arrow-left "></i> Prev'.Yii::t('andahrm', 'Pause'), ['class' => 'btn btn-default', 'name' => 'prev', 'value' => 'prev','disabled'=>'disabled' ]);
        // }
         
         if($finish>$step_index){
-            echo Html::submitButton('Next <i class="fa fa-arrow-right "></i>', ['class' => 'btn btn-success', 'name' => 'next', 'value' => 'next']);
+            echo Html::submitButton(Yii::t('andahrm', 'Next').' <i class="fa fa-arrow-right "></i>', ['class' => 'btn btn-success', 'name' => 'next', 'value' => 'next']);
         }else{
-            echo Html::submitButton('<i class="fa fa-flag-checkered"></i> Done', ['class' => 'btn btn-success', 'name' => 'next', 'value' => 'next']);
+            echo Html::submitButton('<i class="fa fa-flag-checkered"></i> '.Yii::t('andahrm', 'Confirm'), ['class' => 'btn btn-success', 'name' => 'next', 'value' => 'next']);
+            //echo Html::submitButton('<i class="fa fa-flag-checkered"></i> '.Yii::t('andahrm', 'Done'), ['class' => 'btn btn-success', 'name' => 'next', 'value' => 'next']);
         }
     echo Html::endTag('div');
     

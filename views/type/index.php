@@ -11,8 +11,8 @@ $this->title = Yii::t('andahrm/insignia', 'Insignia Types');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="insignia-type-index">
+    
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -41,12 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
             
             'title',
             'title_full',
-            'status',
+            // 'status',
             //'marker',
             // 'marker_scope',
             // 'marker_cropped',
-             'created_at',
-             'created_by',
+            //  'created_at',
+            //  'created_by',
             // 'updated_at',
             // 'updated_by',
 

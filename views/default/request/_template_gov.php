@@ -1,7 +1,8 @@
 <?php
 use yii\helpers\Html;
 use andahrm\person\models\Person;
-
+use andahrm\insignia\models\InsigniaType;
+use andahrm\insignia\models\InsigniaPerson;
 
 
 $css = <<< Css
@@ -10,6 +11,12 @@ Css;
 
 $this->registerCss($css);
 
+
+
+$tambol = isset($tambol)?$tambol:'';
+$amphur = isset($amphur)?$amphur:'';
+$provence = isset($provence)?$provence:'';
+$level = isset($level)?$level:'';
 ?>
 
 
@@ -26,7 +33,7 @@ $this->registerCss($css);
        )?>
        
        <?=Html::tag('h4',
-        Yii::t('andahrm/insignia','Level {levle}',['levle'=>$levle,]),['class'=>'text-center']
+        Yii::t('andahrm/insignia','Level {levle}',['levle'=>$topic->insignia_type_id?$topic->insigniaType->title:'',]),['class'=>'text-center']
        )?>
 
     </div>
@@ -41,21 +48,21 @@ $this->registerCss($css);
         <table class="table table-bordered" width="100%">
             <thead>
                 <tr>
-                    <th rowspan="2">ลำดับ</th>
+                    <th rowspan="2"><?=Yii::t('andahrm/insignia', 'No')?></th>
                     <th rowspan="2"><?=(new Person)->getAttributeLabel('fullname')?></th>
-                    <th colspan="3">เป็นข้าราชการ</th>
-                    <th >ตำแหน่ง</th>
-                    <th rowspan="2">ลำดับเครื่องราช</th>
-                    <th rowspan="2">วัน เดือน ปี</th>
-                    <th rowspan="2">ขอครั้งนี้</th>
-                    <th >หมายเหตุ</th>
+                    <th colspan="3"><?=Yii::t('andahrm/insignia', 'To be goverment')?>เป็นข้าราชการ</th>
+                    <th ><?=Yii::t('andahrm/insignia', 'Position')?></th>
+                    <th rowspan="2"><?=Yii::t('andahrm/insignia', 'List insignia type')?></th>
+                    <th rowspan="2"><?=Yii::t('andahrm/insignia', 'day month year')?> ปี</th>
+                    <th rowspan="2"><?=Yii::t('andahrm/insignia', 'This request')?>ขอครั้งนี้</th>
+                    <th ><?=Yii::t('andahrm/insignia', 'Note')?></th>
                 </tr>
                 
                 <tr>
-                    <th>ระดับ</th>
-                    <th>วันเดือนปี</th>
-                    <th>เงินเดือน</th>
-                    <th>ปัจจุบัน</th>
+                    <th><?=Yii::t('andahrm/insignia', 'No')?></th>
+                    <th><?=Yii::t('andahrm/insignia', 'day month year')?></th>
+                    <th><?=Yii::t('andahrm/insignia', 'Salary')?></th>
+                    <th><?=Yii::t('andahrm/insignia', 'Current and former')?>ปัจจุบัน</th>
                     <th></th>
                 </tr>
                 
@@ -66,17 +73,21 @@ $this->registerCss($css);
                 <?php 
                 //print_r($person);
                 
-                foreach ($person as $key=>$model):?>
+                foreach ($person as $key=>$model):
+                $last = InsigniaPerson::getInsigniaTypes($model->user_id);
+                //print_r($last);
+                ?>
                 <tr>
                     <td><?=$key+1?></td>
                     <td><?=$model->user->fullname?></td>
-                    <td><?=$model->level?></td>
+                    <td><?=$model->step?></td>
                     <td><?=$model->adjust_date?></td>
-                    <td><?=$model->salary?></td>
+                    <td><?=Yii::$app->formatter->asDecimal($model->salary)?></td>
                     <td><?=$model->position->title?></td>
-                    <td></td>
-                    <td></td>
-                    <td><?=$assign->insignia_type_id[$model->user_id]?></td>
+                    
+                    <td><?=$last->insigniaType->title?></td>
+                    <td><?=Yii::$app->formatter->asDate($last->insigniaRequest->created_at)?></td>
+                    <td><?=InsigniaType::getItem($assign->insignia_type_id[$model->user_id])->title?></td>
                     <td><?=$assign->note[$model->user_id]?></td>
                 </tr>
                  <?php endforeach;?>
@@ -105,7 +116,7 @@ $this->registerCss($css);
 	    </p>
         <p class="text-left">
     	    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    	    (<span class="text-dashed width80">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>)
+    	    (<span class="text-dashed width80 text-center"><?=$topic->certificate_offer_name?></span>)
 	    </p>
 	    
 	    <p class="text-left">
@@ -114,7 +125,7 @@ $this->registerCss($css);
 	    
 	    <p class="text-left">
     	    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    	    <?=Yii::t('andahrm/insignia', 'ผู้รับรองเสนอขอพระราชทาน')?>
+    	    <?=Yii::t('andahrm/insignia', 'The certification offered clemency')?>
 	    </p>
         
     </div>

@@ -61,11 +61,33 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/insignia', 'Insigni
                     'attribute'=>'user_id',
                     'value'=>'user.fullname',
                 ],
+                
+                
+                [
+                    'attribute'=>'step',
+                    //'value'=> 'position.title',
+                ],
+                 [
+                    'attribute'=>'adjust_date',
+                    'format' => 'date'
+                ],
+                [
+                    'attribute'=>'salary',
+                    'format' => 'decimal',
+                    'contentOptions'=>['class'=>'text-right']
+                ],
                 [
                     'attribute'=>'position_id',
-                    'value'=> 'position.title',
+                    'format'=>'html',
+                    'value'=> function($model){
+                        return $model->position->title."<br/><small>".$model->position->code."</small>";
+                    }
                 ],
-                'salary'
+                [
+                    'attribute'=>'edoc_id',
+                    'format'=>'html',
+                    'value'=> 'edoc.codeTitle'
+                ],
             ]
         ]);
         ?>

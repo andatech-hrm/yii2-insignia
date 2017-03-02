@@ -3,6 +3,9 @@ use yii\helpers\Html;
 
 
 
+$tambol = isset($tambol)?$tambol:'';
+$amphur = isset($amphur)?$amphur:'';
+$provence = isset($provence)?$provence:'';
 ?>
 
 
@@ -78,7 +81,7 @@ use yii\helpers\Html;
 	    
 	    <p class="text-left">
     	    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    	    <?=Yii::t('andahrm/insignia', 'ผู้รับรองเสนอขอพระราชทาน')?>
+    	    <?=Yii::t('andahrm/insignia', 'The certification offered clemency')?>
 	    </p>
         
     </div>

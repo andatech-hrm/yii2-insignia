@@ -87,16 +87,16 @@ class InsigniaType extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('andahrm/insignia', 'ID'),
-            'title_full' => Yii::t('andahrm/insignia', 'ชื่อเต็ม'),
-            'title' => Yii::t('andahrm/insignia', 'ชื่อย่อ'),
-            'status' => Yii::t('andahrm/insignia', 'สถานะ'),
-            'marker' => Yii::t('andahrm/insignia', 'เครื่องหมายแพรแถบ'),
+            'title_full' => Yii::t('andahrm/insignia', 'Full name'),
+            'title' => Yii::t('andahrm/insignia', 'Initials'),
+            'status' => Yii::t('andahrm/insignia', 'Status'),
+            'marker' => Yii::t('andahrm/insignia', 'marker'), #เครื่องหมายแพรแถบ
             'marker_scope' => Yii::t('andahrm/insignia', 'Marker Scope'),
             'marker_cropped' => Yii::t('andahrm/insignia', 'Marker Croped'),
-            'created_at' => Yii::t('andahrm/insignia', 'Created At'),
-            'created_by' => Yii::t('andahrm/insignia', 'Created By'),
-            'updated_at' => Yii::t('andahrm/insignia', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/insignia', 'Updated By'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
 
@@ -128,6 +128,10 @@ class InsigniaType extends \yii\db\ActiveRecord
                         'width'=>$width
                         ]);
         return $marker.' '.$this->title;
+    }
+    
+     public static function getItem($id){
+        return self::findOne(['id'=>$id]);
     }
     
    

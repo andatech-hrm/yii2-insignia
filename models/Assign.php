@@ -24,7 +24,7 @@ use yii\base\Model;
  * @property InsigniaRequest $insigniaRequest
  * @property InsigniaRequest $insigniaRequestIdLast
  */
-class Assign extends Model
+class Assign extends \andahrm\positionSalary\models\PersonPositionSalary
 {
     public function rules()
     {
@@ -41,16 +41,55 @@ class Assign extends Model
     }
     
     public $insignia_type_id;
+    public $insignia_request_id;
+    public $current_insignia_request_id;
+    public $current_position_id;
+    public $current_salary;
+    public $current_step;
+    public $current_adjust_date;
     public $note;
     
      public function scenarios(){
           $scenarios = parent::scenarios();
           $scenarios['insert'] = [
-              //'user_id', 'position_level_id', 'position_current_date', 'salary', 'position_id',
-              'insignia_type_id',
+              'current_step',
+              'current_adjust_date',
+              'current_salary', 
+              'current_position_id',
+              //'current_insignia_type_id',
+              'current_insignia_request_id',
               'note',
+              'insignia_type_id',
+              //'insignia_request_id'
               ];
           return $scenarios;
+    }
+    
+    public function attributeLabels()
+    {
+        return [
+            'insignia_request_id' => Yii::t('andahrm/insignia', 'Insignia Request'),
+            'user_id' => Yii::t('andahrm/insignia', 'Person'),
+            'position_level_id' => Yii::t('andahrm/insignia', 'Position Level'),
+            'step' => Yii::t('andahrm/insignia', 'Step'),
+            'last_step' => Yii::t('andahrm/insignia', 'Step'),
+            'adjust_date' => Yii::t('andahrm/insignia', 'Last Date'),
+            'position_current_date' => Yii::t('andahrm/insignia', 'Last Date'),
+            'salary' => Yii::t('andahrm/insignia', 'Salary'),
+            'position_id' => Yii::t('andahrm/insignia', 'Last Position'),
+            'insignia_request_id_last' => Yii::t('andahrm/insignia', 'Get Last Insignia'),
+            'insignia_type_id' => Yii::t('andahrm/insignia', 'This request'),
+            'feat' => Yii::t('andahrm/insignia', 'Feat'),
+            'note' => Yii::t('andahrm/insignia', 'Note'),
+        ];
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInsigniaType()
+    {
+        return $this->hasOne(InsigniaType::className(), ['id' => 'insignia_type_id']);
     }
     
     
@@ -64,17 +103,29 @@ class Assign extends Model
         
         //print_r($data->selection);
         //exit()
-        $query = PersonPositionSalary::find()->joinWith('position')
-                ->where(['user_id'=>$data->selection])
+        $submodel = InsigniaPerson::find()
+          ->select([ 'insignia_person.user_id as us' , 'insignia_person.insignia_type_id' ,'insignia_person.insignia_request_id'])
+          ->joinWith('insigniaRequest')
+          ->where(['insignia_person.user_id'=>$data->selection])
+          ->orderBy(['insignia_request.created_at'=>SORT_DESC])
+          ->asArray();
+        
+        
+        $query = self::find()->joinWith('position')
+                ->leftJoin(['b' => $submodel], 'b.us = person_position_salary.user_id')
+                ->select(['person_position_salary.*',
+                'b.*'
+                ])
+                ->where(['person_position_salary.user_id'=>$data->selection])
                 // ->andFilterWhere(['position.person_type_id'=>$person_type_id])
                 // ->andFilterWhere(['position.id'=>$position_id])
                 // ->andFilterWhere(['position.position_level_id'=>$position_level_id])
                 ->groupBy([
-                    'user_id',
-                  //'position_id',
+                    'person_position_salary.user_id',
+                  'position_id',
                     
                 ])
-                ->orderBy(['adjust_date'=>SORT_ASC]);
+                ->orderBy(['person_position_salary.position_id'=>SORT_ASC,'person_position_salary.adjust_date'=>SORT_ASC]);
                 
         $provider = new ActiveDataProvider([
             'query' => $query,
