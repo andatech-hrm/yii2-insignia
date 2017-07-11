@@ -9,7 +9,7 @@ use andahrm\setting\models\WidgetSettings;
 use kartik\widgets\Select2;
 
 use yii\bootstrap\Modal;
-use kuakling\datepicker\DatePicker;
+use andahrm\datepicker\DatePicker;
 use kartik\widgets\FileInput;
 use kartik\widgets\Typeahead;
 use yii\helpers\Url;

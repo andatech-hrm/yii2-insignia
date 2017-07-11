@@ -6,8 +6,8 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use kuakling\datepicker\behaviors\DateBuddhistBehavior;
-use kuakling\datepicker\behaviors\YearBuddhistBehavior;
+use andahrm\datepicker\behaviors\DateBuddhistBehavior;
+use andahrm\datepicker\behaviors\YearBuddhistBehavior;
 use yii\helpers\ArrayHelper;
 use andahrm\structure\models\PersonType;
 
