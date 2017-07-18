@@ -85,8 +85,8 @@ $level = isset($level)?$level:'';
                     <td><?=Yii::$app->formatter->asDecimal($model->salary)?></td>
                     <td><?=$model->position->title?></td>
                     
-                    <td><?=$last->insigniaType->title?></td>
-                    <td><?=Yii::$app->formatter->asDate($last->insigniaRequest->created_at)?></td>
+                    <td><?=$last?$last->insigniaType->title:null?></td>
+                    <td><?=$last?Yii::$app->formatter->asDate($last->insigniaRequest->created_at):null?></td>
                     <td><?=InsigniaType::getItem($assign->insignia_type_id[$model->user_id])->title?></td>
                     <td><?=$assign->note[$model->user_id]?></td>
                 </tr>

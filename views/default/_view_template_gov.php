@@ -88,8 +88,8 @@ $this->registerCss($css);
                     <td><?=Yii::$app->formatter->asDecimal($model->last_salary)?></td>
                     <td><?=$model->lastPosition->title?></td>
                     
-                    <td><?=$last->lastInsigniaType->title?></td>
-                    <td><?=Yii::$app->formatter->asDate($last->lastInsigniaRequest->created_at)?></td>
+                    <td><?=$last->lastInsigniaType?$last->lastInsigniaType->title:null?></td>
+                    <td><?=$last->lastInsigniaType?Yii::$app->formatter->asDate($last->lastInsigniaRequest->created_at):null?></td>
                     <td><?=$model->insigniaType->title?></td>
                     <td><?=$model->note?></td>
                 </tr>

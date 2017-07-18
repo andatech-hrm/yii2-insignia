@@ -138,7 +138,7 @@ $this->registerCss($css);
                 
             <div class="row">
                 <div class="col-sm-4">
-                <?= $form->field($model, 'certificate_offer_name')->widget(Typeahead::classname(),[
+                <?= InsigniaRequest::getListCertificator()?$form->field($model, 'certificate_offer_name')->widget(Typeahead::classname(),[
                   'options' => ['placeholder' => Yii::t('andahrm/insignia', 'Please type or select bondsman name')],
                   'pluginOptions' => ['highlight'=>true],
                   'defaultSuggestions' => InsigniaRequest::getListCertificator(), 
@@ -149,7 +149,7 @@ $this->registerCss($css);
                         ]
                     ]
                   
-                  ])?>
+                  ]):$form->field($model, 'certificate_offer_name')?>
             
                 <?php /* = $form->field($model, 'certificate_offer_date')->textInput() ?>
             
