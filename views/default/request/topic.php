@@ -91,7 +91,6 @@ $this->registerCss($css);
                     ]); ?>
                 </div>
                 
-                
                 <div class="col-sm-4 person_type type8" >
                     <?= $form->field($model, 'position_id')->widget(DepDrop::classname(), [
                         //'options'=>['id'=>'topic-person_type_id'],
@@ -116,8 +115,6 @@ $this->registerCss($css);
                     ]); ?>
                 </div>
                 
-                
-            
             </div>
                 
                 

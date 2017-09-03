@@ -4,6 +4,7 @@ namespace andahrm\insignia\models;
 
 use Yii;
 use andahrm\structure\models\Position;
+use andahrm\datepicker\behaviors\DateBuddhistBehavior;
 /**
  * This is the model class for table "insignia_person".
  *
@@ -38,12 +39,22 @@ class InsigniaPerson extends \yii\db\ActiveRecord
     {
         return [
             [['insignia_request_id', 'user_id',  'last_adjust_date', 'last_salary', 'last_position_id', 'insignia_type_id'], 'required'],
-            [['insignia_request_id', 'user_id',  'last_position_id', 'last_insignia_request_id', 'insignia_type_id'], 'integer'],
-            [['last_adjust_date'], 'safe'],
+            [['insignia_request_id', 'user_id',  'last_position_id', 'last_insignia_request_id', 'insignia_type_id','person_type_id','edoc_id'], 'integer'],
+            [['last_adjust_date','year','gender'], 'safe'],
             [['last_salary','last_step'], 'number'],
             [['feat', 'note'], 'string', 'max' => 300],
             [['insignia_request_id'], 'exist', 'skipOnError' => true, 'targetClass' => InsigniaRequest::className(), 'targetAttribute' => ['insignia_request_id' => 'id']],
             [['last_insignia_request_id'], 'exist', 'skipOnError' => true, 'targetClass' => InsigniaRequest::className(), 'targetAttribute' => ['insignia_request_id_last' => 'id']],
+        ];
+    }
+    
+    public function behaviors()
+    {
+        return [
+            'last_adjust_date' => [
+                'class' => DateBuddhistBehavior::className(),
+                'dateAttribute' => 'last_adjust_date',
+            ],
         ];
     }
 
@@ -131,4 +142,17 @@ class InsigniaPerson extends \yii\db\ActiveRecord
          ->orderBy(['insignia_request.created_at'=>SORT_DESC])
          ->one();
        }
+       
+       public $person_type_id;
+       public $year;
+       public $gender;
+       public $edoc_id;
+       
+       #check exists record
+        public function getExists(){
+            return self::find()->where([
+                'user_id'=>$this->user_id,
+                'insignia_type_id'=>$this->insignia_type_id,
+            ])->exists();
+        }
 }
