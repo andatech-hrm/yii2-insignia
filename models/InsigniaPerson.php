@@ -38,7 +38,8 @@ class InsigniaPerson extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['insignia_request_id', 'user_id',  'last_adjust_date', 'last_salary', 'last_position_id', 'insignia_type_id'], 'required'],
+            [['insignia_request_id', 'user_id',  'last_adjust_date',  'last_position_id', 'insignia_type_id'], 'required'],
+            //[['insignia_request_id', 'user_id',  'last_adjust_date', 'last_salary', 'last_position_id', 'insignia_type_id'], 'required'],
             [['insignia_request_id', 'user_id',  'last_position_id', 'last_insignia_request_id', 'insignia_type_id','person_type_id','edoc_id'], 'integer'],
             [['last_adjust_date','year','gender'], 'safe'],
             [['last_salary','last_step'], 'number'],
