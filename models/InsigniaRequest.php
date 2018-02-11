@@ -7,12 +7,12 @@ use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\ArrayHelper;
-##
+###
 use andahrm\setting\models\Helper;
 use andahrm\structure\models\PersonType;
 use andahrm\edoc\models\Edoc;
 use andahrm\datepicker\behaviors\DateBuddhistBehavior;
-use andahrm\datepicker\behaviors\YearBuddhistBehavior;
+use andahrm\edoc\models\EdocInsignia;
 
 /**
  * This is the model class for table "insignia_request".
@@ -260,7 +260,7 @@ class InsigniaRequest extends ActiveRecord {
     }
 
     public function getEdoc() {
-        return $this->hasOne(Edoc::className(), ['id' => 'edoc_id']);
+        return $this->hasOne(EdocInsignia::className(), ['id' => 'edoc_id']);
     }
 
 }

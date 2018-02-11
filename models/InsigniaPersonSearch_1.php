@@ -18,9 +18,9 @@ class InsigniaPersonSearch extends InsigniaPerson
     public function rules()
     {
         return [
-            [['insignia_type_id', 'position_id', 'edoc_insignia_id', 'user_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['yearly', 'feat', 'note'], 'safe'],
-            [['salary'], 'number'],
+            [['insignia_request_id', 'user_id', 'last_position_id', 'last_edoc_id', 'last_insignia_request_id', 'insignia_type_id'], 'integer'],
+            [['last_step', 'last_salary'], 'number'],
+            [['last_adjust_date', 'feat', 'note'], 'safe'],
         ];
     }
 
@@ -60,16 +60,15 @@ class InsigniaPersonSearch extends InsigniaPerson
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'insignia_type_id' => $this->insignia_type_id,
-            'yearly' => $this->yearly,
-            'salary' => $this->salary,
-            'position_id' => $this->position_id,
-            'edoc_insignia_id' => $this->edoc_insignia_id,
+            'insignia_request_id' => $this->insignia_request_id,
             'user_id' => $this->user_id,
-            'created_at' => $this->created_at,
-            'created_by' => $this->created_by,
-            'updated_at' => $this->updated_at,
-            'updated_by' => $this->updated_by,
+            'last_step' => $this->last_step,
+            'last_adjust_date' => $this->last_adjust_date,
+            'last_salary' => $this->last_salary,
+            'last_position_id' => $this->last_position_id,
+            'last_edoc_id' => $this->last_edoc_id,
+            'last_insignia_request_id' => $this->last_insignia_request_id,
+            'insignia_type_id' => $this->insignia_type_id,
         ]);
 
         $query->andFilterWhere(['like', 'feat', $this->feat])

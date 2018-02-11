@@ -21,10 +21,6 @@ use andahrm\datepicker\behaviors\DateBuddhistBehavior;
  * @property string $note หมายเหตุ
  * @property int $edoc_insignia_id
  * @property int $user_id
- * @property int $created_at
- * @property int $created_by
- * @property int $updated_at
- * @property int $updated_by
  *
  * @property EdocInsignia $edocInsignia
  * @property Person $user
@@ -38,7 +34,7 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
     public static function tableName() {
         return 'insignia_person';
     }
-    
+
     function behaviors() {
 
         return [
@@ -48,6 +44,14 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
                 [
                 'class' => TimestampBehavior::className(),
             ],
+            'certificate_offer_date' => [
+                'class' => DateBuddhistBehavior::className(),
+                'dateAttribute' => 'certificate_offer_date',
+            ],
+                // 'year' => [
+                //     'class' => YearBuddhistBehavior::className(),
+                //     'attribute' => 'year',
+                // ],
         ];
     }
 
@@ -57,7 +61,7 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
     public function rules() {
         return [
                 [['insignia_type_id', 'yearly', 'user_id'], 'required'],
-                [['insignia_type_id', 'position_id', 'edoc_insignia_id', 'user_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+                [['insignia_type_id', 'position_id', 'edoc_insignia_id', 'user_id'], 'integer'],
                 [['yearly'], 'safe'],
                 [['salary'], 'number'],
                 [['feat', 'note'], 'string', 'max' => 300],
@@ -81,10 +85,6 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
             'note' => Yii::t('andahrm/insignia', 'Note'),
             'edoc_insignia_id' => Yii::t('andahrm/insignia', 'Edoc Insignia ID'),
             'user_id' => Yii::t('andahrm/insignia', 'User ID'),
-            'created_at' => Yii::t('andahrm/insignia', 'Created At'),
-            'created_by' => Yii::t('andahrm/insignia', 'Created By'),
-            'updated_at' => Yii::t('andahrm/insignia', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/insignia', 'Updated By'),
         ];
     }
 
