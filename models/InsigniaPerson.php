@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 ######
 use andahrm\edoc\models\EdocInsignia;
 use andahrm\datepicker\behaviors\DateBuddhistBehavior;
+use andahrm\person\models\Person;
 
 /**
  * This is the model class for table "insignia_person".
@@ -98,7 +99,7 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser() {
+    public function getPerson() {
         return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
     }
 
