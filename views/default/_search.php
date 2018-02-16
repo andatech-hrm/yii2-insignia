@@ -4,37 +4,32 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model andahrm\insignia\models\InsigniaRequestSearch */
+/* @var $model andahrm\insignia\models\EdocInsigniaSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="insignia-request-search">
+<div class="edoc-insignia-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-        'options' => [
-            'data-pjax' => 1
-        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'person_type_id') ?>
+    <?= $form->field($model, 'book_number') ?>
 
-    <?= $form->field($model, 'year') ?>
+    <?= $form->field($model, 'part_number') ?>
 
-    <?= $form->field($model, 'insignia_type_id') ?>
+    <?= $form->field($model, 'book_at') ?>
 
-    <?= $form->field($model, 'gender') ?>
+    <?= $form->field($model, 'public_date') ?>
 
-    <?php // echo $form->field($model, 'status') ?>
+    <?php // echo $form->field($model, 'book_date') ?>
 
-    <?php // echo $form->field($model, 'certificate_offer_name') ?>
+    <?php // echo $form->field($model, 'file') ?>
 
-    <?php // echo $form->field($model, 'certificate_offer_date') ?>
-
-    <?php // echo $form->field($model, 'edoc_id') ?>
+    <?php // echo $form->field($model, 'file_name') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 
