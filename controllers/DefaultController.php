@@ -55,13 +55,13 @@ class DefaultController extends Controller {
      */
     public function actionView($id) {
         $model = $this->findModel($id);
-        $modelInsignia = $model->insigniaPeople ? $model->insigniaPeople : new InsigniaPerson();
+        $modelInsignia = $model->insigniaPeople;
         $dataProvider = null;
         
         
         
             $dataProvider = new ArrayDataProvider([
-                'allModels' => $modelInsignia?$modelInsignia:[],
+                'allModels' => $modelInsignia,
             ]);
         
 
