@@ -57,11 +57,13 @@ class DefaultController extends Controller {
         $model = $this->findModel($id);
         $modelInsignia = $model->insigniaPeople ? $model->insigniaPeople : new InsigniaPerson();
         $dataProvider = null;
-        if ($modelInsignia) {
+        
+        
+        
             $dataProvider = new ArrayDataProvider([
-                'allModels' => $modelInsignia
+                'allModels' => $modelInsignia?$modelInsignia:[],
             ]);
-        }
+        
 
         return $this->render('view', [
                     'model' => $model,

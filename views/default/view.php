@@ -64,6 +64,7 @@ Modal::end();
     echo Yii::$app->runAction('/insignia/default/assign', ['formAction' => Url::to(['/insignia/default/assign', 'id' => $model->id]), 'id' => $model->id]);
     ?>
 
+    
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
