@@ -5,11 +5,12 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\edoc\models\EdocInsignia */
 
-$this->title = $model->id;
+$this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/insignia', 'Edoc Insignias'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -23,8 +24,6 @@ $modals['position'] = Modal::begin([
 Modal::end();
 ?>
 <div class="edoc-insignia-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a(Yii::t('andahrm/insignia', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -58,12 +57,19 @@ Modal::end();
         ],
     ])
     ?>
+    <hr/>
 
-
+    <?=Html::tag('h3',Yii::t('andahrm/insignia', 'Insignia Person'));?>
+    
     <?php
     echo Yii::$app->runAction('/insignia/default/assign', ['formAction' => Url::to(['/insignia/default/assign', 'id' => $model->id]), 'id' => $model->id]);
     ?>
 
+    <?php
+    $pjax = Pjax::begin([
+        'id'=>'pjax-person'
+    ]);
+    ?>
     
     <?=
     GridView::widget([
@@ -102,6 +108,7 @@ Modal::end();
         ]
     ]);
     ?>
+    <?php  Pjax::end()?>
 
 
 

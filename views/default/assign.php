@@ -10,56 +10,62 @@ use andahrm\setting\models\WidgetSettings;
 use andahrm\insignia\models\InsigniaType;
 use kartik\select2\Select2;
 use andahrm\person\models\Person;
-
 ?>
 <div class="edoc-insignia-update">
 
     <?php
-  if($formAction !== null)  $formOptions['action'] = $formAction;
-  
-  //$formOptions['enableAjaxValidation'] = true;
-  $formAction = str_replace('assign', 'assign-validate', $formAction);
-  $formOptions['validationUrl'] = $formAction;
-  ?>
+    if ($formAction !== null)
+        $formOptions['action'] = $formAction;
+
+    //$formOptions['enableAjaxValidation'] = true;
+    $formAction = str_replace('assign', 'assign-validate', $formAction);
+    $formOptions['validationUrl'] = $formAction;
+    ?>
     <?php $form = ActiveForm::begin($formOptions); ?>
 
-    
+
     <div class="row">
-        <div class="col-sm-6">   
-            <?php echo $form->field($model, 'user_id')->widget(Select2::className(),
-                         [
-                                    'data' => Person::getList(),
-                                    'options' => ['placeholder' => Yii::t('andahrm/person', 'Search for a edoc')],
-                                    'pluginOptions' => [
-                                        //'tags' => true,
-                                        //'tokenSeparators' => [',', ' '],
-                                        'allowClear'=>true,
-                                        'minimumInputLength'=>2,//ต้องพิมพ์อย่างน้อย 3 อักษร ajax จึงจะทำงาน
-                                        'ajax'=>[
-                                            'url'=>Url::to(['/person/default/get-list']),
-                                            'dataType'=>'json',//รูปแบบการอ่านคือ json
-                                            'data'=>new JsExpression('function(params) { return {q:params.term};}')
-                                         ],
-                                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                                        'templateResult' => new JsExpression('function(position) { return position.text; }'),
-                                        'templateSelection' => new JsExpression('function (position) { return position.text; }'),
-                                    ],
-                                ]
-                         
-                         );?>
+        <div class="col-sm-5">   
+            <?php
+            echo $form->field($model, 'user_id')->widget(Select2::className(), [
+                'data' => Person::getList(),
+                'options' => ['placeholder' => Yii::t('andahrm/person', 'Search for a edoc')],
+                'pluginOptions' => [
+                    //'tags' => true,
+                    //'tokenSeparators' => [',', ' '],
+                    'allowClear' => true,
+                    'minimumInputLength' => 2, //ต้องพิมพ์อย่างน้อย 3 อักษร ajax จึงจะทำงาน
+                    'ajax' => [
+                        'url' => Url::to(['/person/default/get-list']),
+                        'dataType' => 'json', //รูปแบบการอ่านคือ json
+                        'data' => new JsExpression('function(params) { return {q:params.term};}')
+                    ],
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(position) { return position.text; }'),
+                    'templateSelection' => new JsExpression('function (position) { return position.text; }'),
+                ],
+                    ]
+            );
+            ?>
         </div>
 
-        <div class="col-sm-6">   
-            <?php echo $form->field($model, 'insignia_type_id',['enableAjaxValidation' => true])->dropDownList(InsigniaType::getList()); ?>
+        <div class="col-sm-5">   
+
+            <?php echo $form->field($model, 'insignia_type_id', ['enableAjaxValidation' => true])->dropDownList(InsigniaType::getList()); ?>
+        </div>
+
+        <div class="col-sm-2" >
+            <div class="form-group" >
+                <label class="control-label">&nbsp;</label>
+                <?= Html::submitButton(Yii::t('andahrm/insignia', 'Add'), ['class' => 'btn btn-success form-control']) ?>
+            </div>
         </div>
     </div>
-    
 
 
 
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('andahrm/insignia', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
+
+
 
     <?php ActiveForm::end(); ?>
 
@@ -67,8 +73,8 @@ use andahrm\person\models\Person;
 
 <?php
 ///Surakit
-if($formAction !== null) {
-$js[] = <<< JS
+if ($formAction !== null) {
+    $js[] = <<< JS
 $(document).on('submit', '#{$form->id}', function(e){
   e.preventDefault();
   var form = $(this);
@@ -86,7 +92,7 @@ $(document).on('submit', '#{$form->id}', function(e){
     success: function(data) {
       if(data.success){
         console.log(data);
-        //callbackEdoc(data.result,"#{$form->id}");
+        $.pjax.reload({container:"#pjax-person"});
       }else{
         alert('Fail');
       }
@@ -95,6 +101,6 @@ $(document).on('submit', '#{$form->id}', function(e){
 });
 JS;
 
-$this->registerJs(implode("\n", $js));
+    $this->registerJs(implode("\n", $js));
 }
 ?>

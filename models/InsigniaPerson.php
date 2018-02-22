@@ -66,7 +66,7 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
                 [['edoc_insignia_id'], 'exist', 'skipOnError' => true, 'targetClass' => EdocInsignia::className(), 'targetAttribute' => ['edoc_insignia_id' => 'id']],
                 [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Person::className(), 'targetAttribute' => ['user_id' => 'user_id']],
                 [['insignia_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => InsigniaType::className(), 'targetAttribute' => ['insignia_type_id' => 'id']],
-                [['user_id', 'insignia_type_id'], 'unique', 'targetAttribute' => ['insignia_type_id']]
+                [['user_id', 'insignia_type_id'], 'unique', 'targetAttribute' => ['user_id','insignia_type_id']]
         ];
     }
 
