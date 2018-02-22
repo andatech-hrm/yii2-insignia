@@ -7,6 +7,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 ####
 use andahrm\edoc\models\EdocInsignia;
 use andahrm\insignia\models\EdocInsigniaSearch;
@@ -53,15 +55,13 @@ class DefaultController extends Controller {
      */
     public function actionView($id) {
         $model = $this->findModel($id);
-        $modelInsignia= $model->insigniaPeople ? $model->insigniaPeople : new InsigniaPerson();
+        $modelInsignia = $model->insigniaPeople ? $model->insigniaPeople : new InsigniaPerson();
         $dataProvider = null;
         if ($modelInsignia) {
             $dataProvider = new ArrayDataProvider([
                 'allModels' => $modelInsignia
             ]);
         }
-
-
 
         return $this->render('view', [
                     'model' => $model,
@@ -103,6 +103,52 @@ class DefaultController extends Controller {
         return $this->render('update', [
                     'model' => $model,
         ]);
+    }
+
+    public function actionAssignValidate($id, $formAction = null) {
+        $model = new InsigniaPerson(['edoc_insignia_id' => $id]);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+    }
+
+    public function actionAssign($id, $formAction = null, $mode = null, $user_id = null, $insignia_type_id = null) {
+        if ($mode == 'del') {
+            $model = InsigniaPerson::find()->where([
+                        'user_id' => $user_id,
+                        'insignia_type_id' => $insignia_type_id,
+                        'edoc_insignia_id' => $id,
+                    ])->one();
+            
+            if ($model->delete()) {
+                return $this->redirect(['view', 'id' => $model->edoc_insignia_id]);
+            }
+        } else {
+            $model = new InsigniaPerson(['edoc_insignia_id' => $id]);
+            $request = Yii::$app->request;
+            $post = $request->post();
+            $success = false;
+            $result = [];
+
+            if ($model->load($post)) {
+                Yii::$app->response->format = Response::FORMAT_JSON; //กำหนดการแสดงผลข้อมูลแบบ json
+                //print_r($post);
+                //exit();
+                if ($model->save()) {
+                    $success = true;
+                    $result = $model;
+                } else {
+                    $result = $model->getErrors();
+                }
+                return ['success' => $success, 'result' => $result];
+            }
+
+            return $this->renderPartial('assign', [
+                        'model' => $model,
+                        'formAction' => $formAction
+            ]);
+        }
     }
 
     /**

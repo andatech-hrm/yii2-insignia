@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
@@ -11,6 +12,15 @@ use yii\grid\GridView;
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/insignia', 'Edoc Insignias'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+
+$modals['position'] = Modal::begin([
+            'header' => Yii::t('andahrm/insignia', 'Assign Insignia'),
+            'size' => Modal::SIZE_LARGE
+        ]);
+//echo Yii::$app->runAction('/insignia/default/assign', ['formAction' => Url::to(['/insignia/default/assign','id'=>$model->id]),'id'=>$model->id]);
+
+Modal::end();
 ?>
 <div class="edoc-insignia-view">
 
@@ -41,18 +51,54 @@ $this->params['breadcrumbs'][] = $this->title;
             'book_date',
             'file',
             'file_name',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
+//            'created_at',
+//            'created_by',
+//            'updated_at',
+//            'updated_by',
         ],
     ])
     ?>
 
 
+    <?php
+    echo Yii::$app->runAction('/insignia/default/assign', ['formAction' => Url::to(['/insignia/default/assign', 'id' => $model->id]), 'id' => $model->id]);
+    ?>
+
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
+        'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                'attribute' => 'user_id',
+                'value' => function($model) {
+                    return $model->person->fullname;
+                }
+            ],
+                [
+                'attribute' => 'insignia_type_id',
+                'format' => 'html',
+                'value' => function($model) {
+                    return $model->insigniaType->titleIcon;
+                }
+            ],
+                [
+//                'header' => Html::button('เพิ่ม', [
+//                    'class' => 'btn btn-success',
+//                    "data-toggle" => "modal",
+//                    "data-target" => "#{$modals['position']->id}"
+//                ]),
+                'content' => function($model) {
+                    return Html::a('ลบ', [
+                                'assign',
+                                'id' => $model->edoc_insignia_id,
+                                'user_id'=>$model->user_id,
+                                'insignia_type_id'=>$model->insignia_type_id,
+                                'mode' => 'del'
+                                    ], ['class' => 'btn btn-danger']);
+                }
+            ],
+        ]
     ]);
     ?>
 

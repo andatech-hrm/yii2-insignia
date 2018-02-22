@@ -39,7 +39,7 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
     public static function tableName() {
         return 'insignia_person';
     }
-    
+
     function behaviors() {
 
         return [
@@ -57,7 +57,7 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['insignia_type_id', 'yearly', 'user_id'], 'required'],
+                [['insignia_type_id', 'user_id'], 'required'],
                 [['insignia_type_id', 'position_id', 'edoc_insignia_id', 'user_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
                 [['yearly'], 'safe'],
                 [['salary'], 'number'],
@@ -66,6 +66,7 @@ class InsigniaPerson extends \yii\db\ActiveRecord {
                 [['edoc_insignia_id'], 'exist', 'skipOnError' => true, 'targetClass' => EdocInsignia::className(), 'targetAttribute' => ['edoc_insignia_id' => 'id']],
                 [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Person::className(), 'targetAttribute' => ['user_id' => 'user_id']],
                 [['insignia_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => InsigniaType::className(), 'targetAttribute' => ['insignia_type_id' => 'id']],
+                [['user_id', 'insignia_type_id'], 'unique', 'targetAttribute' => ['insignia_type_id']]
         ];
     }
 
