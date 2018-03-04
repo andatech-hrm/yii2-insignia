@@ -46,6 +46,7 @@ Modal::end();
             'book_number',
             'part_number',
             'book_at',
+            'page_number',
             'public_date:date',
             'book_date:date',
             'file',
